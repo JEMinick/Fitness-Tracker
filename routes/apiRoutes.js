@@ -49,7 +49,7 @@ router.post('/api/workouts', ({ body }, res) => {
 
 // GET : fetch(`/api/workouts/range`)
 router.get('/api/workouts/range', (req, res) => {
-  let msDays = (6*24*60*60*1000)
+  let msDays = (7*24*60*60*1000)
   let month = new Date(new Date()-msDays).getMonth()+1;
   let dayofmonth = new Date(new Date()-msDays).getDate();
   let year = new Date(new Date()-msDays).getFullYear();
@@ -84,13 +84,17 @@ router.get('/api/workouts/range', (req, res) => {
 
     console.log( `Length of range query: [${dbWorkout.length}]` );
 
-    for( var i=0; i < dbWorkout.length; i++ )
+    let iWorkoutIdx=0;
+    if ( dbWorkout.length > 7 )
+      iWorkoutIdx = dbWorkout.length-7;
+    
+    for( iWorkoutIdx; iWorkoutIdx < dbWorkout.length; iWorkoutIdx++ )
     {
-      month = new Date(dbWorkout[i].day).getMonth()+1;
-      dayofmonth = new Date(dbWorkout[i].day).getDate();
-      year = new Date(dbWorkout[i].day).getFullYear();
+      month = new Date(dbWorkout[iWorkoutIdx].day).getMonth()+1;
+      dayofmonth = new Date(dbWorkout[iWorkoutIdx].day).getDate();
+      year = new Date(dbWorkout[iWorkoutIdx].day).getFullYear();
       sWorkoutDate = `${month}/${dayofmonth}/${year}`;
-      console.log( `[${i}]: [${sWorkoutDate}]` );
+      console.log( `[${iWorkoutIdx}]: [${sWorkoutDate}]` );
 
       if ( sLastDate.length === 0 ) {
         sLastDate = sWorkoutDate;
@@ -107,23 +111,23 @@ router.get('/api/workouts/range', (req, res) => {
         }
       }
 
-      if ( dbWorkout[i].exercises ) {
-        for( var j=0; j < dbWorkout[i].exercises.length; j++ )
+      if ( dbWorkout[iWorkoutIdx].exercises ) {
+        for( var j=0; j < dbWorkout[iWorkoutIdx].exercises.length; j++ )
         {
-          if ( dbWorkout[i].exercises[j] ) {
-            if ( dbWorkout[i].exercises[j].duration ) {
-              console.log( `     [${j}]: Duration: [${dbWorkout[i].exercises[j].duration}]` );
-              iDuration += dbWorkout[i].exercises[j].duration;
+          if ( dbWorkout[iWorkoutIdx].exercises[j] ) {
+            if ( dbWorkout[iWorkoutIdx].exercises[j].duration ) {
+              console.log( `     [${j}]: Duration: [${dbWorkout[iWorkoutIdx].exercises[j].duration}]` );
+              iDuration += dbWorkout[iWorkoutIdx].exercises[j].duration;
             }
-            if ( dbWorkout[i].exercises[j].weight ) {
-              console.log( `     [${j}]: Weight:   [${dbWorkout[i].exercises[j].weight}]` )
-              iWeight += dbWorkout[i].exercises[j].weight;
+            if ( dbWorkout[iWorkoutIdx].exercises[j].weight ) {
+              console.log( `     [${j}]: Weight:   [${dbWorkout[iWorkoutIdx].exercises[j].weight}]` )
+              iWeight += dbWorkout[iWorkoutIdx].exercises[j].weight;
             }
           }
         } // endFor
       }
 
-      if ( i === dbWorkout.length-1 ) {
+      if ( iWorkoutIdx === dbWorkout.length-1 ) {
         dbWorkout2.push( {
           workoutDate: sLastDate,
           totalDuration: iDuration,
