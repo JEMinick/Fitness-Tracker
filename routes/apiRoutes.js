@@ -3,7 +3,6 @@ const db = require("../models");
 
 // GET : fetch("/api/workouts")
 router.get('/api/workouts', (req, res) => {
-  // need to add 'totalDuration'
   db.Workout.find({})
   .then(dbWorkout => {
     res.json(dbWorkout);
@@ -15,7 +14,7 @@ router.get('/api/workouts', (req, res) => {
 
 // PUT : fetch("/api/workouts/:id")
 router.put('/api/workouts/:id', ({ body, params }, res) => {
-  console.log(body)
+  // console.log(body)
   db.Workout.findByIdAndUpdate(params.id,
     { $push: { exercises: body } }, { new: true })
     .then(dbWorkout => {
@@ -55,7 +54,7 @@ router.get('/api/workouts/range', (req, res) => {
   let year = new Date(new Date()-msDays).getFullYear();
   let sWorkoutDate = `${month}/${dayofmonth}/${year}`;
 
-  console.log( `Search for gte: [${sWorkoutDate}]` );
+  // console.log( `Search for gte: [${sWorkoutDate}]` );
 
   db.Workout.find( {day: { $gte: `${sWorkoutDate}` }} )
 
@@ -64,6 +63,7 @@ router.get('/api/workouts/range', (req, res) => {
   // .limit(7)
 
   .then(dbWorkout => {
+
     // var mapFunction1 = function() {
     //   emit(day, weight);
     // };
@@ -82,7 +82,7 @@ router.get('/api/workouts/range', (req, res) => {
     let iWeight = 0;
     let dbWorkout2=[];
 
-    console.log( `Length of range query: [${dbWorkout.length}]` );
+    // console.log( `Length of range query: [${dbWorkout.length}]` );
 
     let iWorkoutIdx=0;
     if ( dbWorkout.length > 7 )
@@ -94,7 +94,8 @@ router.get('/api/workouts/range', (req, res) => {
       dayofmonth = new Date(dbWorkout[iWorkoutIdx].day).getDate();
       year = new Date(dbWorkout[iWorkoutIdx].day).getFullYear();
       sWorkoutDate = `${month}/${dayofmonth}/${year}`;
-      console.log( `[${iWorkoutIdx}]: [${sWorkoutDate}]` );
+
+      // console.log( `[${iWorkoutIdx}]: [${sWorkoutDate}]` );
 
       if ( sLastDate.length === 0 ) {
         sLastDate = sWorkoutDate;
@@ -116,11 +117,11 @@ router.get('/api/workouts/range', (req, res) => {
         {
           if ( dbWorkout[iWorkoutIdx].exercises[j] ) {
             if ( dbWorkout[iWorkoutIdx].exercises[j].duration ) {
-              console.log( `     [${j}]: Duration: [${dbWorkout[iWorkoutIdx].exercises[j].duration}]` );
+              // console.log( `     [${j}]: Duration: [${dbWorkout[iWorkoutIdx].exercises[j].duration}]` );
               iDuration += dbWorkout[iWorkoutIdx].exercises[j].duration;
             }
             if ( dbWorkout[iWorkoutIdx].exercises[j].weight ) {
-              console.log( `     [${j}]: Weight:   [${dbWorkout[iWorkoutIdx].exercises[j].weight}]` )
+              // console.log( `     [${j}]: Weight:   [${dbWorkout[iWorkoutIdx].exercises[j].weight}]` )
               iWeight += dbWorkout[iWorkoutIdx].exercises[j].weight;
             }
           }
@@ -137,8 +138,8 @@ router.get('/api/workouts/range', (req, res) => {
 
     } // endFor
 
-    console.log( `\nRANGE SUMMARY:` );
-    console.log( dbWorkout2 );
+    // console.log( `\nRANGE SUMMARY:` );
+    // console.log( dbWorkout2 );
     
     res.json(dbWorkout2);
   })
@@ -146,15 +147,5 @@ router.get('/api/workouts/range', (req, res) => {
     res.status(400).json(err);
   });
 });
-
-// router.delete("/api/workouts", ({ body }, res) => {
-//   db.Workout.findByIdAndRemove(body.id)
-//   .then(() => {
-//     res.json(true);
-//   })
-//   .catch(err => {
-//     res.status(400).json(err);
-//   });
-// });
 
 module.exports = router;

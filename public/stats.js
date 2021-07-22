@@ -27,16 +27,13 @@ function calculateTotalWeight(data) {
 }
 
 function populateChart(data) {
-  console.log( `populateChart():` );
-  // console.log( data );
-  // const durations = data.map( ({ totalDuration }) => totalDuration );
-  const durations = data;
-  console.log( `DURATIONS: `);
-  console.log( durations );
-  // const pounds = calculateTotalWeight(data);
-  console.log( `POUNDS:` );
-  const pounds = data;
-  console.log( pounds );
+  // console.log( `populateChart():` );
+  // const durations = data;
+  // console.log( `DURATIONS: `);
+  // console.log( durations );
+  // console.log( `POUNDS:` );
+  // const pounds = data;
+  // console.log( pounds );
 
   const line = document.querySelector('#canvas').getContext('2d');
   const bar = document.querySelector('#canvas2').getContext('2d');
@@ -56,6 +53,7 @@ function populateChart(data) {
   for( var i=0; i < data.length; i++ ) {
     labels.push( data[i].workoutDate );
   }
+  
   let chartData = [];
   for( var i=0; i < data.length; i++ ) {
     chartData.push( data[i].totalDuration );
@@ -70,24 +68,11 @@ function populateChart(data) {
           label: 'Workout Duration In Minutes',
           backgroundColor: 'red',
           borderColor: 'red',
-          // data: durations,
           data: chartData,
           fill: false,
         },
       ],
     },
-    // options: {
-    //   responsive: true,
-    //   title: {
-    //     display: true,
-    //     text: 'Time Spent Working Out (Last 7 days)',
-    //   },
-    //   scales: {
-    //     y: {
-    //       beginAtZero: true,
-    //     },
-    //   },
-    // },
     options: {
       responsive: true,
       title: {
@@ -115,10 +100,6 @@ function populateChart(data) {
     }
   });
 
-  // labels = [];
-  // for( var i=0; i < data.length; i++ ) {
-  //   labels.push( data[i].workoutDate );
-  // }
   chartData = [];
   for( var i=0; i < data.length; i++ ) {
     chartData.push( data[i].totalWeight );
@@ -131,7 +112,6 @@ function populateChart(data) {
       datasets: [
         {
           label: 'Pounds',
-          // data: pounds,
           data: chartData,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
